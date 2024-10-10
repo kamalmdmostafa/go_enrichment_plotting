@@ -29,7 +29,7 @@ The script can visualize GO enrichment results from any source, as long as the i
 - p.adjust (adjusted p-value)
 
 Optional but recommended column:
-- User_Defined_Category (for grouping and ordering GO terms)
+- User_Defined_Category (for grouping and ordering GO terms). For starters, you can use MapMan Mercator for grouping based on similar terms or Use AI-based grouping. Manual curation is recommended. 
 
 ### Data Ordering
 
