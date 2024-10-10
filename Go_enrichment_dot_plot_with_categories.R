@@ -170,8 +170,8 @@ main <- function(enrichment_score_cutoff = 0) {
   print(plot)
   
   # Save the plot
-  ggsave("GO_BP_Simplified_dotplot.pdf", plot = plot, width = 6, height = 6, limitsize = FALSE)
-  cat("Plot saved as GO_BP_Simplified_dotplot.pdf\n")
+  ggsave("GO_categorized_dotplot.pdf", plot = plot, width = 6, height = 6, limitsize = FALSE)
+  cat("Plot saved as GO_categorized_dotplot.pdf\n")
   
   if (!ask_to_continue("Step 3 (Exporting Data)")) {
     cat("\nAnalysis complete after Step 2.\n")
