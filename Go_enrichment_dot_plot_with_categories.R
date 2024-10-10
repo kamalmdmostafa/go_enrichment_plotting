@@ -186,5 +186,6 @@ main <- function(enrichment_score_cutoff = 0) {
   return(enriched_data)
 }
 
-# Run the main function
-main(enrichment_score_cutoff = 3)
+# Run the main function.
+#main() If you do not want to put any cutoff here, just run by replacing "#" bfore main() and place a "#" infront of the next line
+main(enrichment_score_cutoff = 2)
