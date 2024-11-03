@@ -351,7 +351,7 @@ handle_visualization <- function(enriched_data) {
 }
 # Main execution
 main <- function() {
-  file_path <- 'Tu_db_8_with_Enrichment_score.xlsx'
+  file_path <- 'your_input_file.xlsx'
   
   cat("Step 1: Calculating Enrichment Score\n")
   enriched_data <- calculate_enrichment_score(file_path)
