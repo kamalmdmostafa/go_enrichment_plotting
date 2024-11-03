@@ -1,90 +1,227 @@
-# go_enrichment_plotting
-# GO Enrichment Visualization and Analysis Script
+# GO Term Enrichment Score Analysis and Visualization
 
-This R script visualizes and analyzes pre-existing Gene Ontology (GO) enrichment data. It's designed to work with GO enrichment results from any tool, provided the output contains the required columns. The script can handle data from a single group or multiple groups (defined in the Cluster column) and offers an interactive, step-by-step process for calculating enrichment scores, creating plots, and exporting data.
+This R script calculates enrichment scores for GO (Gene Ontology) terms and provides interactive visualization. The enrichment score helps identify GO terms that are significantly overrepresented in your gene clusters compared to the background, followed by customizable visualization of the results.
+
+## Enrichment Score Calculation
+
+### Formula
+The enrichment score is calculated as:
+```
+EnrichmentScore = (GeneRatio_numeric / BgRatio_numeric)
+
+Where:
+GeneRatio_numeric = number of genes in cluster with GO term / total genes in cluster
+BgRatio_numeric = number of genes in background with GO term / total genes in background
+```
+
+For example:
+- If 5 out of 100 genes in your cluster have a GO term (GeneRatio = "5/100")
+- And 20 out of 1000 genes in background have the same GO term (BgRatio = "20/1000")
+- The enrichment score would be: (5/100)/(20/1000) = 2.5
+
+### Interpretation
+- Score > 1: GO term is enriched in your cluster compared to background
+- Score = 1: GO term appears at expected frequency
+- Score < 1: GO term is depleted in your cluster
+
+The higher the enrichment score, the stronger the enrichment of that GO term in your cluster.
 
 ## Prerequisites
 
 ### Installing R and RStudio
 
-1. Download and install R from [The Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/).
-2. Download and install RStudio from the [RStudio website](https://www.rstudio.com/products/rstudio/download/).
+1. Install R:
+   - Visit [R Project website](https://www.r-project.org/)
+   - Click on "CRAN" under "Download"
+   - Choose your nearest mirror
+   - Select your operating system (Windows/Mac/Linux)
+   - Download and install the latest version of R
+
+2. Install RStudio:
+   - Visit [RStudio website](https://www.rstudio.com/products/rstudio/download/)
+   - Download the free RStudio Desktop version
+   - Install the downloaded file
 
 ### Required R Packages
 
-Install the following R packages by running these commands in R or RStudio:
-
+Run these commands in RStudio to install required packages:
 ```R
 install.packages(c("ggplot2", "dplyr", "tidyr", "stringr", "readxl", "writexl", "extrafont"))
 ```
 
-## Data Requirements
+## Input File Requirements
 
-The script can visualize GO enrichment results from any source, as long as the input file (in Excel format, .xlsx) contains the following required columns:
+### File Format
+- Excel file (.xlsx)
+- File should be placed in the same directory as the script
 
-- Cluster (defines the group; can be a single group or multiple)
-- Description (GO term description)
-- GeneRatio
-- BgRatio
-- p.adjust (adjusted p-value)
+### Required Columns
+Your Excel file must contain these columns:
+1. `Cluster`: Cluster identifiers
+2. `Description`: GO term descriptions
+3. `GeneRatio`: Format must be "n/m" where:
+   - n = number of genes in cluster with this GO term
+   - m = total number of genes in cluster
+4. `BgRatio`: Format must be "N/M" where:
+   - N = number of genes in background with this GO term
+   - M = total number of background genes
+5. `p.adjust`: Adjusted p-values (numeric)
 
-Optional but recommended column:
-- User_Defined_Category (for grouping and ordering GO terms). For starters, you can use MapMan Mercator for grouping based on similar terms or Use AI-based grouping. Manual curation is recommended. 
+### Optional Column
+- `User_Defined_Category`: Category labels for GO terms (for visualization grouping)
 
-### Data Ordering
+## Analysis and Visualization Features
 
-If your data includes a User_Defined_Category column, the script preserves the order of categories as they appear in your input data. To customize the order of categories:
+### Analysis Features
+1. **Enrichment Score Calculation**
+   - Automatically calculates enrichment scores from ratio data
+   - Handles multiple clusters simultaneously
+   - Preserves statistical significance information (p.adjust)
 
-1. Open your input Excel file.
-2. Arrange the rows so that the User_Defined_Category column is in your desired order.
-3. Save the Excel file.
+2. **Data Filtering**
+   - Filter by minimum enrichment score
+   - Maintains cluster-specific context
+   - Retains statistical significance information
 
-The script will use this order for plotting.
+3. **Term Selection**
+   - Select top terms by:
+     - Adjusted p-value (statistical significance)
+     - Enrichment score (effect size)
+   - Cluster-specific selection
+   - Customizable number of terms (default: top 30)
 
-## Usage
+### Interactive Menu Options
 
-1. Clone this repository or download the R script.
-2. Open the script in RStudio.
-3. Modify the `file_path` variable in the `main` function to point to your input Excel file:
+1. **Enter new enrichment score cutoff**
+   - Accept any positive number (e.g., 1.5, 2, 2.5)
+   - Filter GO terms based on enrichment score threshold
+   - Shows summary of filtered results
 
-   ```R
-   file_path <- 'path/to/your/data.xlsx'
-   ```
+2. **Plot in R Studio**
+   - Displays the current visualization
+   - Shows enrichment scores as point sizes
+   - Shows adjusted p-values as color gradient (red to blue)
+   - Displays categories as background colors if provided
 
-4. Run the script by calling the `main` function:
+3. **Change category order**
+   - Option 1: Order by data appearance
+   - Option 2: Order by plot appearance (based on maximum enrichment scores)
 
-   ```R
-   main(enrichment_score_cutoff = 2)
-   ```
+4. **Save current plot**
+   - Default filename: GO_BP_Simplified_dotplot.pdf
+   - Custom filename option
+   - Saves as PDF format
+   - Fixed dimensions (6x6 inches)
 
-   Adjust the `enrichment_score_cutoff` value as needed. Set it to 0 to include all terms.
+5. **Export data**
+   - Default filename: enrichment_data.xlsx
+   - Custom filename option
+   - Exports complete dataset with calculations
+   - Continues visualization after export
 
-5. Follow the interactive prompts to proceed through each step of the analysis.
+6. **Change sorting method**
+   - Option 1: Sort by adjusted p-value (lowest first)
+   - Option 2: Sort by enrichment score (highest first)
+   - Affects the selection of top 30 terms per cluster
 
-## Script Functionality
+7. **Quit visualization**
+   - Exits the visualization process
+   - Returns to main program
 
-The script performs the following steps:
+## Output Data Structure
 
-1. Reads the pre-existing GO enrichment data.
-2. Calculates Enrichment Scores based on GeneRatio and BgRatio.
-3. Creates a dot plot visualizing the GO terms, their adjusted p-values, and Enrichment Scores.
-4. Exports the complete dataset, including calculated Enrichment Scores.
+### Calculated Columns
+The script adds these calculated columns to your data:
+1. `GeneRatio_k`: Numerator of GeneRatio
+2. `GeneRatio_n`: Denominator of GeneRatio
+3. `BgRatio_K`: Numerator of BgRatio
+4. `BgRatio_N`: Denominator of BgRatio
+5. `GeneRatio_numeric`: Calculated numeric GeneRatio
+6. `BgRatio_numeric`: Calculated numeric BgRatio
+7. `EnrichmentScore`: Final enrichment score
 
-At each step, you'll be prompted to continue or stop the analysis.
+### Plot Features
+- Point size: Represents Enrichment Score
+- Point color: Represents adjusted p-value (red: low, blue: high)
+- Background color: Represents User Defined Category (if provided)
+- X-axis: Clusters
+- Y-axis: GO term descriptions (truncated to 45 characters)
 
-## Output
+## Output Files
 
-- A PDF file named "GO_categorized_dotplot.pdf" containing the visualization.
-- An Excel file named "enrichment_data.xlsx" containing all the data, including calculated Enrichment Scores.
+### Plot File (PDF)
+- Default name: GO_BP_Simplified_dotplot.pdf
+- Format: PDF
+- Size: 6x6 inches
+- Resolution: Print quality
+
+### Data Export (Excel)
+- Default name: enrichment_data.xlsx
+- Format: Excel (.xlsx)
+- Contains all original and calculated columns
+
+## Notes
+
+- The script uses Times New Roman font. Make sure it's installed on your system
+- Windows users should use `loadfonts(device = "win")`
+- Mac users should use `loadfonts(device = "mac")`
+- The visualization shows top 30 terms per cluster by default
+- All filtered terms must meet the enrichment score cutoff
+- Categories are optional but enhance visual grouping
+
+## Troubleshooting
+
+### Font Issues
+If you encounter font-related errors:
+```R
+# Run this command to install fonts
+extrafont::font_import()
+# Then reload fonts
+loadfonts(device = "win") # or "mac" for MacOS
+```
+
+### Common Issues
+1. Missing columns in input file
+   - Check column names match exactly
+   - Ensure all required columns are present
+
+2. Invalid ratio formats
+   - Check GeneRatio and BgRatio follow "n/m" format
+   - Ensure numbers are positive integers
+
+3. Plot display issues
+   - Try closing all existing plot windows
+   - Use the 'Plot in RStudio' option again
+
+## Statistical Notes
+
+- The script calculates enrichment scores but does not calculate p-values
+- P-values should be calculated by your GO enrichment analysis tool
+- Both metrics (enrichment score and p-value) should be considered for interpretation
+
+## File Structure
+```
+.
+├── script.R                     # Main script file
+├── your_input_file.xlsx        # Your GO term data
+├── GO_BP_Simplified_dotplot.pdf # Generated plot (default name)
+└── enrichment_data.xlsx        # Exported data (default name)
+```
 
 ## Contributing
 
-Feel free to fork this repository and submit pull requests with any enhancements.
+Feel free to submit issues and enhancement requests through GitHub.
 
 ## License
 
-This project is licensed under the MIT License:
+[Add your preferred license]
 
-MIT License
+## Contact
 
-Copyright (c) 2023 [Kamal Md Mostafa]
+[Add your contact information]
+
+## Citation
+
+If you use this script in your research, please cite:
+[Add citation information]
+
