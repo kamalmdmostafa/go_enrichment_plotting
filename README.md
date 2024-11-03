@@ -214,14 +214,25 @@ Feel free to submit issues and enhancement requests through GitHub.
 
 ## License
 
-[Add your preferred license]
+This work is licensed under a Creative Commons License. You are free to:
+
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+
+[![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
+
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+- **NonCommercial** — You may not use the material for commercial purposes.
+- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+
+This is a human-readable summary of (and not a substitute for) the [license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+
+[cc-by-nc-sa]: https://creativecommons.org/licenses/by-nc-sa/4.0/
+[cc-by-nc-sa-shield]: https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg
 
 ## Contact
 
-[Add your contact information]
-
-## Citation
-
-If you use this script in your research, please cite:
-[Add citation information]
+Open an issue if you face any problems.
 
