@@ -283,20 +283,42 @@ handle_visualization <- function(enriched_data) {
         next
       }
       
-      filename <- readline("Enter filename for plot (default: GO_BP_Simplified_dotplot.pdf): ")
-      if (filename == "") filename <- "GO_BP_Simplified_dotplot.pdf"
-      if (!grepl("\\.pdf$", filename)) filename <- paste0(filename, ".pdf")
+      cat("\nSelect action:")
+      cat("\n1: Save plot")
+      cat("\n2: Return to main menu\n")
+      save_choice <- readline("Choose action (1-2): ")
       
-      tryCatch({
-        ggsave(filename, plot = current_plot, width = 6, height = 6, limitsize = FALSE)
-        cat("Plot saved as", filename, "\n")
-      }, error = function(e) {
-        cat("Error saving plot:", e$message, "\n")
-      })
+      if (save_choice == "1") {
+        filename <- readline("Enter filename for plot (default: GO_BP_Simplified_dotplot.pdf): ")
+        if (filename == "") filename <- "GO_BP_Simplified_dotplot.pdf"
+        if (!grepl("\\.pdf$", filename)) filename <- paste0(filename, ".pdf")
+        
+        tryCatch({
+          ggsave(filename, plot = current_plot, width = 6, height = 6, limitsize = FALSE)
+          cat("Plot saved as", filename, "\n")
+        }, error = function(e) {
+          cat("Error saving plot:", e$message, "\n")
+        })
+      } else if (save_choice == "2") {
+        cat("\nReturning to main menu.\n")
+      } else {
+        cat("\nInvalid choice. Returning to main menu.\n")
+      }
       
     } else if (action == "5") {
-      export_data(enriched_data, prompt = TRUE)
-      cat("\nData exported. Continuing with visualization.\n")
+      cat("\nSelect action:")
+      cat("\n1: Export data")
+      cat("\n2: Return to main menu\n")
+      export_choice <- readline("Choose action (1-2): ")
+      
+      if (export_choice == "1") {
+        export_data(enriched_data, prompt = TRUE)
+        cat("\nData exported. Continuing with visualization.\n")
+      } else if (export_choice == "2") {
+        cat("\nReturning to main menu.\n")
+      } else {
+        cat("\nInvalid choice. Returning to main menu.\n")
+      }
       
     } else if (action == "6") {
       cat("\nSelect sorting method:")
@@ -327,7 +349,6 @@ handle_visualization <- function(enriched_data) {
     }
   }
 }
-
 # Main execution
 main <- function() {
   file_path <- 'Tu_db_8_with_Enrichment_score.xlsx'
