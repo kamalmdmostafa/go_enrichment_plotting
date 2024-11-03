@@ -126,8 +126,7 @@ Your Excel file must contain these columns:
 
 7. **Quit visualization**
    - Exits the visualization process
-   - Returns to main program
-
+        
 ## Output Data Structure
 
 ### Calculated Columns
